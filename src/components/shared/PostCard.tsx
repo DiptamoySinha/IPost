@@ -11,10 +11,10 @@ type PostCardProps = {
   post: Models.Document;
 };
 
-const PostCard = ({ post }: PostCardProps) => {
+const PostCard = ({ post}: PostCardProps) => {
   const { user } = useUserContext();
 
-  if (!post.creator) return;
+  if (!post?.creator) return;
 
   return (
     <div className="post-card">

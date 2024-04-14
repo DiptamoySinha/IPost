@@ -11,7 +11,7 @@ type postStatsProp = {
 
 export default function PostStats({post, userId}: postStatsProp) {
     const likeList = post.likes.map((user: Models.Document) => user.$id);
-    console.log(`${post.caption} => ${likeList.length}`)
+    // console.log(`${post.caption} => ${likeList.length}`)
     const [likes, setLikes] = useState(likeList);
 
     const[isSave, setIsSave] = useState(false);
@@ -24,9 +24,12 @@ export default function PostStats({post, userId}: postStatsProp) {
     const savePostRecord = currentUser?.save.find((record: Models.Document) => record.post.$id === post.$id);
 
     useEffect(() => {
-        setIsSave(!!savePostRecord)
         setLikes(likeList);
-    }, [currentUser, likeList.length])
+    }, [likeList.length])
+
+    useEffect(() => {
+        setIsSave(!!savePostRecord)
+    }, [currentUser])
 
 
     function handleLikePost(e: React.MouseEvent) {

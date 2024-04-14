@@ -2,8 +2,6 @@ import { ID, Query } from "appwrite";
 
 import { INewPost, INewUser, IUpdatePost } from "../../../types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
-import { useQuery } from "@tanstack/react-query";
-import { QUERY_KEYS } from "../react-query/queryKeys";
 
 export async function createUserAccount(user: INewUser) {
   try {
@@ -340,6 +338,47 @@ export async function getPostById(postId: string)
     if(!post) throw Error;
 
     return post
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getInfinitePosts({pageParam}: {pageParam: number}){
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(10)]
+
+  if(pageParam) {
+    queries.push(Query.cursorAfter(pageParam.toString()));
+  }
+
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      queries
+    )
+
+    if(!posts) throw Error;
+
+    return posts;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+export async function SearchPosts(searchTerm: string){
+
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      [Query.search('caption', searchTerm)]
+    )
+
+    if(!posts) throw Error;
+
+    return posts;
   } catch (error) {
     console.log(error);
   }

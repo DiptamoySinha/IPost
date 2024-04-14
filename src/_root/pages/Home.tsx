@@ -1,5 +1,8 @@
 import {PostCard, Loader} from '@/components/shared';
+import { getRecentPosts } from '@/lib/appwrite/api';
+import { client } from '@/lib/react-query/QueryProvider';
 import { useGetRecentPosts } from '@/lib/react-query/queriesAndMutation'
+import { QUERY_KEYS } from '@/lib/react-query/queryKeys';
 import { Models } from 'appwrite';
 
 export default function Home() {
@@ -38,4 +41,12 @@ export default function Home() {
       </div>
     </div>
   )
+}
+
+export function homeLoader() {
+  console.log('calling home loader')
+  return client.fetchQuery({
+    queryKey: ['recentPost'],
+    queryFn: getRecentPosts
+})
 }

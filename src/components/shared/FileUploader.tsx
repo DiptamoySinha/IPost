@@ -8,7 +8,7 @@ type FileUploaderProps = {
     mediaUrl: string;
   };
 
-export default function FileUploader({ fieldChange, mediaUrl }: FileUploaderProps) {
+export default function  FileUploader({ fieldChange, mediaUrl }: FileUploaderProps) {
     const [file, setFile] = useState<File[]>([]);
     const [fileUrl, setFileUrl] = useState<string>(mediaUrl);
 

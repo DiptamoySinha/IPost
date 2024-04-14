@@ -4,16 +4,17 @@ import { Link } from "react-router-dom";
 // import { PostStats } from "@/components/shared";
 // import { multiFormatDateString } from "@/lib/utils";
 import { useUserContext } from "@/context/AuthContext";
+import { multiFormatDateString } from "@/lib/utils";
+import PostStats from "./PostStats";
 
 type PostCardProps = {
   post: Models.Document;
 };
 
-const PostCard = ({ post }: PostCardProps) => {
-    console.log(post)
+const PostCard = ({ post}: PostCardProps) => {
   const { user } = useUserContext();
 
-  if (!post.creator) return;
+  if (!post?.creator) return;
 
   return (
     <div className="post-card">
@@ -36,8 +37,7 @@ const PostCard = ({ post }: PostCardProps) => {
             </p>
             <div className="flex-center gap-2 text-light-3">
               <p className="subtle-semibold lg:small-regular ">
-                {/* {multiFormatDateString(post.$createdAt)} */}
-                {post.$createdAt}
+                {multiFormatDateString(post.$createdAt)}
               </p>
               •
               <p className="subtle-semibold lg:small-regular">
@@ -78,7 +78,7 @@ const PostCard = ({ post }: PostCardProps) => {
         />
       </Link>
 
-      {/* <PostStats post={post} userId={user.id} /> */}
+      <PostStats post={post} userId={user.id}/>
     </div>
   );
 };

@@ -18,6 +18,7 @@ import RootLayout from './_root/RootLayout';
 import AuthLayout from  './_auth/AuthLayout';
 
 import './globals.css';
+import { homeLoader } from "./_root/pages/Home";
 
 
 export default function App() {
@@ -32,7 +33,7 @@ export default function App() {
          
           {/* private */}
           <Route element={<RootLayout />}>
-            <Route index element={<Home />} />
+            <Route index element={<Home />} loader={homeLoader}/>
             <Route path="/explore" element={<Explore />} />
             <Route path="/saved" element={<Saved />} />
             <Route path="/all-users" element={<AllUsers />} />

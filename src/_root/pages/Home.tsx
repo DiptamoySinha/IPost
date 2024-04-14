@@ -1,10 +1,15 @@
 import {PostCard, Loader} from '@/components/shared';
+import { getRecentPosts } from '@/lib/appwrite/api';
+import { client } from '@/lib/react-query/QueryProvider';
 import { useGetRecentPosts } from '@/lib/react-query/queriesAndMutation'
+// import { QUERY_KEYS } from '@/lib/react-query/queryKeys';
 import { Models } from 'appwrite';
 
 export default function Home() {
 
   const {data: posts, isPending: isPostLoading, isError: isErrorPosts} = useGetRecentPosts()
+  // console.log(isRefetching)
+  console.log('postFetched: ' + posts?.documents.length)
 
   if (isErrorPosts) {
     return (
@@ -38,4 +43,12 @@ export default function Home() {
       </div>
     </div>
   )
+}
+
+export function homeLoader() {
+  console.log('calling home loader')
+  return client.fetchQuery({
+    queryKey: ['recentPost'],
+    queryFn: getRecentPosts
+})
 }

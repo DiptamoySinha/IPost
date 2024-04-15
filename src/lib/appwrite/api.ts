@@ -343,6 +343,23 @@ export async function getPostById(postId: string)
   }
 }
 
+export async function getAllPostByIds(postId: string[])
+{
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      [Query.equal('$id', postId.length === 0 ? [''] : postId)]
+    )
+
+    // if(!posts) throw Error;
+
+    return posts
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function getInfinitePosts({pageParam}: {pageParam: number}){
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(10)]
@@ -379,6 +396,28 @@ export async function SearchPosts(searchTerm: string){
     if(!posts) throw Error;
 
     return posts;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getUser(limit?: number) {
+  const queries: any[] = [Query.orderDesc("$createdAt")];
+
+  if (limit) {
+    queries.push(Query.limit(limit));
+  }
+
+  try {
+    const users = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      queries
+    );
+
+    if (!users) throw Error;
+
+    return users;
   } catch (error) {
     console.log(error);
   }

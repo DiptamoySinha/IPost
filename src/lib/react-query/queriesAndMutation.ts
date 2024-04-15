@@ -5,7 +5,7 @@ import {
     useInfiniteQuery
 } from '@tanstack/react-query';
 
-import {SearchPosts, createPost, createUserAccount, deletePost, deleteSavePost, getCurrentUser, getInfinitePosts, getPostById, getRecentPosts, likePost, savePost, signInAccount, signOutAccount, updatePost} from '../appwrite/api'
+import {SearchPosts, createPost, createUserAccount, deletePost, deleteSavePost, getAllPostByIds, getCurrentUser, getInfinitePosts, getPostById, getRecentPosts, getUser, likePost, savePost, signInAccount, signOutAccount, updatePost} from '../appwrite/api'
 import { INewPost, INewUser, IUpdatePost } from '../../../types';
 import { QUERY_KEYS } from './queryKeys';
 
@@ -135,19 +135,27 @@ export const useGetPostById = (postId: string) => {
     })
 }
 
+export const useGetAllPostByIds = (postId: string[]) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.GET_POST_BY_ID, postId],
+        queryFn: () => getAllPostByIds(postId),
+        enabled: !!postId
+    })
+}
+
 export const useGetPosts = () => {
     return useInfiniteQuery({
         queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-        queryFn: getInfinitePosts as any,
-        getNextPageParam: (lastPage: any) => {
+        queryFn: getInfinitePosts,
+        getNextPageParam: (lastPage) => {
           // If there's no data, there are no more pages.
           if (lastPage && lastPage.documents.length === 0) {
             return null;
           }
     
           // Use the $id of the last document as the cursor.
-          const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
-          return lastId;
+          const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
+          return lastId
         },
       });
 }
@@ -158,4 +166,11 @@ export const useSearchPosts = (searchTerm: string) => {
         queryFn: () => SearchPosts(searchTerm),
         enabled: !!searchTerm
     })
+}
+
+export const useGetUsers = (limit?: number) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USERS],
+    queryFn: () => getUser(limit)
+  })
 }

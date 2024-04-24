@@ -18,7 +18,7 @@ export default function PostStats({post, userId}: postStatsProp) {
 
     const {mutate: likePost} = useLikePost();
     const {mutate: savePost} = useSavePost();
-    const {mutate: deleteSavePost} = useDeleteSavePost();
+    const {mutate: deleteSavePost, isPending: isSaveDeleting} = useDeleteSavePost();
 
     const {data: currentUser, isLoading: isUserLoading} = useGetCurrentUser();
     const savePostRecord = currentUser?.save.find((record: Models.Document) => record.post.$id === post.$id);
@@ -76,8 +76,8 @@ export default function PostStats({post, userId}: postStatsProp) {
             </div>
 
             <div className="flex gap-2 ">
-                {isUserLoading && <Loader/>}
-                {!isUserLoading && <img src={isSave ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
+                {(isUserLoading || isSaveDeleting) && <Loader/>}
+                {(!isUserLoading || isSaveDeleting) && <img src={isSave ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
                     alt="like" 
                     width={20}
                     height={20}
